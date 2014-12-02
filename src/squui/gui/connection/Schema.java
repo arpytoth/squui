@@ -10,5 +10,9 @@ public class Schema {
     public Schema() {
         
     }
+    
+    public String toString() {
+        return name;
+    }
 
 }

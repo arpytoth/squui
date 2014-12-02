@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 import squui.gui.ContentPane;
 import squui.gui.Module;
 
-public class ConnectionManagerModule implements Module{
+public class ConnectionModule implements Module{
     
     @Override
     public ContentPane constructGui() {

@@ -1,4 +1,4 @@
-package squui;
+package squui.gui.editor;
 
 import java.awt.Color;
 import java.util.HashSet;

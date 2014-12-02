@@ -2,7 +2,7 @@ package squui.gui;
 
 import java.util.ArrayList;
 
-import squui.gui.connection.ConnectionManagerModule;
+import squui.gui.connection.ConnectionModule;
 
 
 /**
@@ -19,7 +19,7 @@ public class Modules {
     
     public static ArrayList<Module> getModules() {
         if (modules == null) {
-            defaultModule = new ConnectionManagerModule();
+            defaultModule = new ConnectionModule();
             modules = new ArrayList<Module>();
             modules.add(defaultModule);
         }

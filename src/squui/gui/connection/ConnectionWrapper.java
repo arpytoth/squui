@@ -2,6 +2,8 @@ package squui.gui.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -51,6 +53,29 @@ public class ConnectionWrapper {
             }
             conn = null;
         }
+    }
+    
+    public ResultSet sql(String sql) throws SQLException {
+        PreparedStatement st;
+        st = conn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        return rs;
+    }
+    
+    public ArrayList<Schema> getSchemas() {
+        schemas = new ArrayList<Schema>();
+        try {
+            PreparedStatement st = conn.prepareStatement("SHOW databases;");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()){
+                Schema schema = new Schema();
+                schema.name = rs.getString(1);
+                schemas.add(schema);
+            }
+        } catch (SQLException e) {
+            Log.error(e);
+        }
+        return schemas;
     }
 
 }

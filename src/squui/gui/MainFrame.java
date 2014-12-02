@@ -7,9 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import squui.gui.connection.ConnectionPane;
-
-
 /**
  * The main window of the SquuI application. There is only one window so this
  * is a singleton, mostly to avoid passing as parameter crap.
@@ -40,7 +37,7 @@ public class MainFrame extends JFrame implements  ActionListener{
 	 */
 	private MainFrame(){
 		setTitle("SquuI");
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
 		tabsPane = new ClosableTabbedPane();
