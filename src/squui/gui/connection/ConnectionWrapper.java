@@ -74,6 +74,12 @@ public class ConnectionWrapper {
         }
     }
     
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        PreparedStatement st;
+        st = conn.prepareStatement(sql);
+        return st;
+    }
+    
     public ResultSet sql(String sql) throws SQLException {
         PreparedStatement st;
         st = conn.prepareStatement(sql);

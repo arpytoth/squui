@@ -20,11 +20,11 @@
 package squui.gui.connection;
 
 import java.awt.BorderLayout;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -125,12 +125,23 @@ ResultPaneListener {
             OutputEntry e = new OutputEntry();
             e.action = sql;
             try {
-                ResultSet rs = conn.sql(sql);
-                resultPane = new ResultPane(conn, rs);
-                resultPane.setListener(this);
-                rebuildEditorAndResultPanel();
-                
-                e.message = "x row(s) returned";
+                PreparedStatement st;
+                st = conn.prepareStatement(sql);
+                boolean ok = st.execute();
+                if (ok) {
+                    ResultSet rs = st.getResultSet();
+                    resultPane = new ResultPane(conn, rs);
+                    resultPane.setListener(this);
+                    rebuildEditorAndResultPanel();
+                    rs.last();
+                    
+                    int count = rs.getRow();
+                    rs.first();
+                    e.message = count + " row(s) returned";
+                } else {
+                    int count = st.getUpdateCount();
+                    e.message = count + " row(s) updated";
+                }
             } catch (SQLException ex) {
                 e.message = ex.getMessage();
                 e.isError = true;

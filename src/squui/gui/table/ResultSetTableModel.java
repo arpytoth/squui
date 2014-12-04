@@ -23,8 +23,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -41,29 +39,22 @@ import squui.log.Log;
 public class ResultSetTableModel extends AbstractTableModel{
 
     private static final long serialVersionUID = 1L;
-    private ArrayList<String> primaryKey;
+    private ArrayList<Integer> primaryKey;
     private ArrayList<String> columns;
-    private ArrayList<Object[]> rows;
-    private ArrayList<Object[]> oldRows;
-    private HashMap<String, UpdateDescriptor> updates;
+    private ArrayList<Row> rows;
     private boolean readOnly;
     private String tableName;
     private String schemaName;
     
-    @SuppressWarnings("unchecked")
     public ResultSetTableModel(ConnectionWrapper conn, ResultSet rs) {
-        this.rows = new ArrayList<Object[]>();
+        this.rows = new ArrayList<Row>();
         this.columns = new ArrayList<String>();
         this.readOnly = false;
-        this.primaryKey = new ArrayList<String>();
-        this.updates = new HashMap<String, UpdateDescriptor>();
-        
+        this.primaryKey = new ArrayList<Integer>();
+
         try {
             ResultSetMetaData data = rs.getMetaData();
 
-            
-            
-            
             for (int i = 1; i <= data.getColumnCount(); i++) {
                 String name = data.getColumnName(i);
                 columns.add(name);
@@ -81,29 +72,33 @@ public class ResultSetTableModel extends AbstractTableModel{
             
             if (!readOnly && schemaName != null && tableName != null) {
                 Schema s = conn.getSchema(schemaName);
+                
                 if (s == null) {
                     readOnly = true;
-                } else {
+                } else { 
+                    schemaName = s.name;
                     Table t = s.getTable(tableName);
                     if (t == null) {
                         readOnly = true;
                     } else {
                         for (Column c : t.columns) {
-                            if (c.isColumnKey && !columns.contains(c.name)) {
-                                readOnly = true;
-                                break;
-                            } else {
-                                primaryKey.add(c.name);
-                            }
+                            int index = getIndexForColumn(c.name);
+                            if (c.isColumnKey ) {
+                                if (index < 0) {
+                                    readOnly = true;
+                                } else {
+                                    primaryKey.add(index);
+                                }
+                            } 
                         }
                     }
                 }
             }
 
             while (rs.next()) {
-                Object[] row = new Object[data.getColumnCount()];
+                Row row = new Row();
                 for (int i = 1; i <= data.getColumnCount(); i++) {
-                    row[i - 1] = rs.getObject(i);
+                    row.add(rs.getObject(i));
                 }
                 rows.add(row);
             }
@@ -111,31 +106,68 @@ public class ResultSetTableModel extends AbstractTableModel{
         } catch (SQLException e) {
             Log.error(e);
         }
-        oldRows = (ArrayList<Object[]>) rows.clone();
+        
+        if (!readOnly)
+            rows.add(new Row(true));
     }
     
     public ArrayList<String> getUpdateQueries() {
         ArrayList<String> sqlList = new ArrayList<String>();
-        Collection<UpdateDescriptor> updCol = updates.values();
         
-        for (UpdateDescriptor u : updCol) {
-            String sql = "UPDATE `" + schemaName + "`.`" + tableName + " SET ";
-            boolean first = true;
-            for (FieldSet s : u.setList) { 
-                if (first) 
-                    first = false;
-                else 
-                    sql += ", ";
-                sql += "`" +s.column+ "`=`"+ s.value +"`";              
+        
+        for (Row u : rows) {
+            if (!u.isNew && u.isEdited) {
+                String sql = "UPDATE `" + schemaName + "`.`" + tableName +
+                    " SET ";
+
+                ArrayList<FieldSet> setList = u.getChanges();
+                if (setList == null || setList.isEmpty())
+                    continue;
+
+                for (int i = 0; i < setList.size(); i++) {
+                    FieldSet s = setList.get(i);
+
+                    if (i > 0)
+                        sql += ", ";
+                    sql += "`" + s.col + "`=`" + s.value + "`";
+                }
+                sql += " WHERE ";
+                for (int i = 0; i < primaryKey.size(); i++) {
+                    int index = primaryKey.get(i);
+
+                    if (i > 0)
+                        sql += " and ";
+                    sql += "`" + columns.get(index) + "`=`" +
+                        u.values.get(i).oldVal + "`";
+                }
+                sql += ";";
+                sqlList.add(sql);
+            } else if (u.isNew && u.isEdited) {
+                String sql = "INSERT INTO `";
+                sql +=  schemaName + "`.`" + tableName + "` (";
+
+                String values = " VALUES (";
+             
+                boolean first = true;
+                for (int i = 0; i < u.values.size(); i++) {
+                    Value val = u.get(i);
+                    if (val.val != null) {
+                        if (first == true) {
+                            first = false;
+                        } else {
+                            sql += ", ";
+                            values +=", ";
+                        }
+                        
+                        String column = columns.get(i);
+                        
+                        sql += "`" + column + "`";
+                        values += "'" + val.val + "'";
+                    }
+                }
+                sql += ")" + values + ");";
+                sqlList.add(sql);
             }
-            sql += " WHERE ";
-            for (int i = 0; i < u.keyValues.size(); i++) { 
-                if (i > 0) 
-                    sql += " and ";
-                sql += "`"+primaryKey.get(i)+"`=`"+ u.keyValues.get(i) +"`";              
-            }
-            sql += ";";
-            sqlList.add(sql);
         }
         return sqlList;
     }
@@ -153,18 +185,12 @@ public class ResultSetTableModel extends AbstractTableModel{
     
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Object[] row = rows.get(rowIndex);
-        row[columnIndex] = aValue;
-       
-        ArrayList<Object> keyVals = new ArrayList<Object>();
-        String hashKey = getKey( rowIndex, columnIndex, keyVals);
-        UpdateDescriptor update = updates.get(hashKey);
-        if (update == null) {
-            update = new UpdateDescriptor();
-            updates.put(hashKey, update);
-            update.keyValues =keyVals;
+        Row row = rows.get(rowIndex);
+        row.update(columnIndex, aValue);
+        if (!readOnly && rowIndex == getRowCount() - 1) {
+            rows.add(new Row(true));
+            fireTableDataChanged();
         }
-        update.add(columnIndex, aValue);
     }
 
     @Override
@@ -179,8 +205,8 @@ public class ResultSetTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Object[] row = rows.get(rowIndex);
-        return row[columnIndex];
+        Row row = rows.get(rowIndex);
+        return row.get(columnIndex).val;
     }
     
     private int getIndexForColumn(String column) {
@@ -191,37 +217,65 @@ public class ResultSetTableModel extends AbstractTableModel{
         return -1;
     }
     
-    private String getKey(int row, int col,  ArrayList<Object> keyValues) {
-        String hashKey = "";
-        Object[] rowVals = oldRows.get(row);
-        for (String c : primaryKey) {
-            int index = getIndexForColumn(c);
-            Object val = rowVals[index];
-            keyValues.add(val);
-            hashKey += String.valueOf(val) + "_";
-        }
-        return hashKey;
+  
+    class Value {
+        Object oldVal;
+        Object val;
     }
     
     class FieldSet {
-        int column;
+        String col;
         Object value;
     }
     
-    class UpdateDescriptor {
-        ArrayList<Object> keyValues;
-        ArrayList<FieldSet> setList;
-
-        UpdateDescriptor() {
-            setList = new ArrayList<FieldSet>();
+    class Row {
+        ArrayList<Value> values;
+        boolean isNew;
+        boolean isEdited;
+        
+        Row(boolean isNew) {
+            this.isNew = isNew;
+            isEdited = false;
+            values = new ArrayList<ResultSetTableModel.Value>();
+            if (isNew) {
+                for (int i = 0; i < columns.size(); i++)
+                    values.add(new Value());
+            }
         }
         
-        public void add(int column, Object value) {
-            FieldSet fs = new FieldSet();
-            fs.column = column;
-            fs.value = value;
-            setList.add(fs);
+        Row() {
+           this(false);
+        }
+        
+        void add(Object obj) {
+            Value val = new Value();
+            val.val = obj;
+            val.oldVal = obj;
+            values.add(val);
+        }
+        
+        Value get(int column) {
+            return values.get(column);
+        }
+        
+        ArrayList<FieldSet> getChanges() {
+            ArrayList<FieldSet> setList = new ArrayList<FieldSet>();
+            for (int i = 0; i < values.size(); i++)  {
+                Value v = values.get(i);
+                if (v.val != v.oldVal) {
+                    FieldSet set = new FieldSet();
+                    set.col = columns.get(i);
+                    set.value = v.val;
+                    setList.add(set);
+                }
+            }
+            return setList;
+        }
+        
+        void update(int colIndex, Object newVal) {
+            Value value = get(colIndex);
+            value.val = newVal;
+            isEdited = true;
         }
     }
-    
 }
