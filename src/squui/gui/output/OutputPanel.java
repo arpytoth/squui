@@ -17,18 +17,38 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui.gui.connection;
+package squui.gui.output;
 
-import java.util.ArrayList;
+import java.awt.BorderLayout;
 
-public class Table {
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-    public Schema schema;
-    public ArrayList<Column> columns;
-    public String name;
+/**
+ * Displays the output of a series of MySQL commands.
+ */
+public class OutputPanel extends JPanel{
 
-    @Override
-    public String toString() {
-        return name;
+    private static final long serialVersionUID = 1L;
+    private JTable table;
+    private OutputTableModel model;
+    
+    public OutputPanel() {
+        model = new OutputTableModel();
+        
+        table = new JTable();
+        table.setModel(model);
+        
+        JScrollPane scrollTable = new JScrollPane();
+        scrollTable.setViewportView(table);
+        
+        setLayout(new BorderLayout());
+        add(scrollTable, BorderLayout.NORTH);
+    }
+    
+    public void addEntry(OutputEntry e) {
+        model.add(e);
+        model.fireTableDataChanged();
     }
 }

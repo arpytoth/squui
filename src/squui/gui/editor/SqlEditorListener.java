@@ -17,18 +17,25 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui.gui.connection;
+package squui.gui.editor;
 
 import java.util.ArrayList;
 
-public class Table {
+import squui.gui.connection.ConnectionPane;
 
-    public Schema schema;
-    public ArrayList<Column> columns;
-    public String name;
+/**
+ * Listens for events occurred in the SQL editor.
+ */
+public interface SqlEditorListener {
 
-    @Override
-    public String toString() {
-        return name;
-    }
+    /**
+     * Called when a list of SQL commands where executed by the SQL editor. The
+     * {@link ConnectionPane} will react at this event and will do the actual
+     * execution.
+     * 
+     * @param sqlList
+     *            a list of SQL commands
+     */
+    public void executed(ArrayList<String> sqlList);
+
 }

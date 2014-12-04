@@ -17,18 +17,15 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui.gui.connection;
+package squui.gui.output;
 
-import java.util.ArrayList;
+/**
+ * An entry from the output panel.
+ */
+public class OutputEntry {
+    
+    public boolean isError;
+    public String action;
+    public String message;
 
-public class Table {
-
-    public Schema schema;
-    public ArrayList<Column> columns;
-    public String name;
-
-    @Override
-    public String toString() {
-        return name;
-    }
 }

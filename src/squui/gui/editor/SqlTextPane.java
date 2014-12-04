@@ -2,15 +2,12 @@ package squui.gui.editor;
 
 import javax.swing.JTextPane;
 
-
-public class SyntaxEditor extends JTextPane{
+public class SqlTextPane extends JTextPane{
     
 
-    public SyntaxEditor() {
+    public SqlTextPane() {
         setDocument(new SqlDocument());
         
     }
  
 }
-
-

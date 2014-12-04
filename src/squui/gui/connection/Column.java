@@ -19,16 +19,17 @@
  */
 package squui.gui.connection;
 
-import java.util.ArrayList;
-
-public class Table {
-
-    public Schema schema;
-    public ArrayList<Column> columns;
+public class Column {
+    
+    public Table table;
     public String name;
-
+    public String type;
+    public boolean isNullable;
+    public boolean isColumnKey;
+    
     @Override
     public String toString() {
         return name;
     }
+
 }
