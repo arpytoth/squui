@@ -18,8 +18,11 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui;
+package squui.gui;
 
-public class Sample {
+import javax.swing.JPanel;
+
+@SuppressWarnings("serial")
+public class TabPanel extends JPanel {
 
 }

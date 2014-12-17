@@ -18,8 +18,8 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui;
+package squui.gui.home;
 
-public class Sample {
+public class fgsdfg {
 
 }

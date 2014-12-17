@@ -18,8 +18,25 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui;
+package squui.gui.connection;
 
-public class Sample {
+import squui.gui.xml.XmlNode;
 
+public class ConnectionSettings {
+
+    public String name;
+    public String user;
+    public String host;
+    public String pass;
+    
+    public XmlNode toXmlNode() {
+        XmlNode node = new XmlNode();
+        node.name = "connection";
+        node.addAttr("user", user);
+        node.addAttr("host", host);
+        node.addAttr("pass", pass);
+        node.addAttr("name", name);
+        return node;
+    }
+    
 }

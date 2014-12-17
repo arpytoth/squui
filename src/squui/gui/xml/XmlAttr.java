@@ -1,5 +1,4 @@
 /* 
- * SQUUI by Toth Arpad (Simple SQL GUI)
  * Copyright (C) 2014 Toth Arpad 
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -18,8 +17,11 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui;
+package squui.gui.xml;
 
-public class Sample {
-
+public class XmlAttr {
+    
+    public String name;
+    public String value;
+    
 }

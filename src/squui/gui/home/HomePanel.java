@@ -18,8 +18,13 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui;
+package squui.gui.home;
 
-public class Sample {
+import squui.gui.TabPanel;
+
+@SuppressWarnings("serial")
+public class HomePanel extends TabPanel {
+
+
 
 }
