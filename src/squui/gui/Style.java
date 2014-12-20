@@ -18,8 +18,15 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui.gui.home;
+package squui.gui;
 
-public class fgsdfg {
+import java.awt.Color;
 
+import javax.swing.JPanel;
+
+public class Style {
+
+	public static Color pnlBkColor = new JPanel().getBackground();
+	public static Color connBkColor = pnlBkColor.darker();
+	
 }

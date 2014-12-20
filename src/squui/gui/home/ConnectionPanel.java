@@ -20,9 +20,21 @@
  */
 package squui.gui.home;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
+
+import squui.gui.Style;
 
 @SuppressWarnings("serial")
 public class ConnectionPanel extends JPanel {
+	
+	public ConnectionPanel() {
+		setMaximumSize(new Dimension(200, 200));
+		setMinimumSize(new Dimension(200, 200));
+		setPreferredSize(new Dimension(200, 200));
+		
+		setBackground(Style.connBkColor);
+	}
 
 }

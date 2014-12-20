@@ -24,5 +24,9 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class TabPanel extends JPanel {
+    
+    public TabPanel() {
+        setBackground(Style.pnlBkColor);
+    }
 
 }

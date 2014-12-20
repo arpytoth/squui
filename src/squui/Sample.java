@@ -1,5 +1,5 @@
 /* 
- * SQUUI by Toth Arpad (Simple SQL GUI)
+ * SQUUI by Toth Arpad
  * Copyright (C) 2014 Toth Arpad 
  *
  *   This program is free software; you can redistribute it and/or modify

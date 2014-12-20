@@ -3,7 +3,7 @@ package squui;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import squui.gui.MainFrame;
-import squui.gui.connection.ConnectionPane;
+import squui.gui.home.HomePanel;
 
 public class Main {
 
@@ -11,6 +11,6 @@ public class Main {
             InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
         MainFrame.get().setVisible(true);
-        MainFrame.get().addTab("Ceva", new ConnectionPane());
+        MainFrame.get().addTab("Home", new HomePanel());
     }
 }

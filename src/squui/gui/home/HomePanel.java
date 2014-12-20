@@ -1,5 +1,5 @@
 /* 
- * SQUUI by Toth Arpad (Simple SQL GUI)
+ * SQUUI by Toth Arpad
  * Copyright (C) 2014 Toth Arpad 
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -20,11 +20,23 @@
  */
 package squui.gui.home;
 
+import java.awt.FlowLayout;
+
 import squui.gui.TabPanel;
 
 @SuppressWarnings("serial")
 public class HomePanel extends TabPanel {
 
+    public HomePanel()   {
+        ConnectionPanel panel1 = new ConnectionPanel();
+        add(panel1);
+        ConnectionPanel panel2 = new ConnectionPanel();
+        add(panel2);
+        ConnectionPanel panel3 = new ConnectionPanel();
+        add(panel3);
+        
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+    }
 
 
 }
