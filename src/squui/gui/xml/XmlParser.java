@@ -71,7 +71,7 @@ public class XmlParser {
             if (ch == -1 )
                 throw new XmlException("End of file reached");
 
-            readed_word += ch;
+            readed_word += (char)ch;
             readChar();
         }
         if (readed_word.length() == 0)
@@ -90,7 +90,7 @@ public class XmlParser {
         String readed_value = "";
 
         while (ch != '"') {
-            readed_value += ch;
+            readed_value += (char)ch;
             readChar();
         }
         nextChar();
@@ -117,7 +117,7 @@ public class XmlParser {
             if (ch == -1)
                 throw new XmlException("End of file.");
 
-            readed_value += ch;
+            readed_value += (char)ch;
             readChar();
         }
         return readed_value;
@@ -157,7 +157,7 @@ public class XmlParser {
      *            this scenario and note that this method MUST return after the
      *            last > character was readed.
      */
-    XmlNode parseNode() {
+     public XmlNode parseNode() {
         XmlNode node = new XmlNode();
         if (ch != '<')
             nextChar();
@@ -206,7 +206,7 @@ public class XmlParser {
                 if (ch == -1)
                     throw new XmlException("End of file.");
                 
-                node.cdata += ch;
+                node.cdata += (char)ch;
                 readChar();
                 
                 if (node.cdata.length() > 3) {

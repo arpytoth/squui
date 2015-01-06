@@ -45,6 +45,14 @@ public class XmlNode {
         attributes.add(attr);
     }
 
+    public String getAttr(String name) {
+        for (XmlAttr attr: attributes) {
+            if (attr.name.equals(name))
+                return attr.name;
+        }
+        return null;
+    }
+    
     public boolean hasValue() {
         return value != null && !value.isEmpty();
     }

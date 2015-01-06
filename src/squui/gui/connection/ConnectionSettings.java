@@ -39,4 +39,11 @@ public class ConnectionSettings {
         return node;
     }
     
+    public void load(XmlNode node) {
+        user = node.getAttr("user");
+        host = node.getAttr("host");
+        pass = node.getAttr("pass");
+        name = node.getAttr("name");
+    }
+    
 }

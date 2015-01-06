@@ -20,6 +20,7 @@
  */
 package squui.gui;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -27,8 +28,12 @@ import java.util.ArrayList;
 
 import squui.gui.connection.ConnectionSettings;
 import squui.gui.xml.XmlNode;
+import squui.gui.xml.XmlParser;
 import squui.log.Log;
 
+/**
+ * Holds all settings.
+ */
 public class Settings {
 
     private static Settings instance;
@@ -46,7 +51,22 @@ public class Settings {
     }
 
     public void load() {
-
+        try {
+            FileInputStream in = new FileInputStream("settings");
+            XmlParser parser = new XmlParser(in);
+            XmlNode node = parser.parseNode();
+            
+            for (int i = 0; i < node.children.size(); i++) {
+                XmlNode child = node.children.get(i);
+                if (child.name.equals("connection")) {
+                    ConnectionSettings c = new ConnectionSettings();
+                    c.load(child);
+                    connections.add(c);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.error(e);
+        }
     }
 
     public void save() {
@@ -59,7 +79,7 @@ public class Settings {
         String str = node.toString();
         
         try {
-            FileOutputStream outStream = new FileOutputStream("settings.txt");
+            FileOutputStream outStream = new FileOutputStream("settings");
             PrintStream out = new PrintStream(outStream);
             out.print(str);
             out.close();

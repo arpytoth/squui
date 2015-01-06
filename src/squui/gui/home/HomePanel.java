@@ -22,21 +22,29 @@ package squui.gui.home;
 
 import java.awt.FlowLayout;
 
+import javax.swing.JPanel;
+
+import squui.gui.Settings;
 import squui.gui.TabPanel;
+import squui.gui.connection.ConnectionSettings;
 
 @SuppressWarnings("serial")
 public class HomePanel extends TabPanel {
 
     public HomePanel()   {
-        ConnectionPanel panel1 = new ConnectionPanel();
-        add(panel1);
-        ConnectionPanel panel2 = new ConnectionPanel();
-        add(panel2);
-        ConnectionPanel panel3 = new ConnectionPanel();
-        add(panel3);
+        Settings settings = Settings.get();
+        for (int i = 0; i < settings.connections.size(); i++) {
+            ConnectionSettings cs = settings.connections.get(i);
+            ConnectionPanel panel = new ConnectionPanel();
+            add(panel);
+        }
         
         setLayout(new FlowLayout(FlowLayout.LEFT));
     }
 
 
+    
+    private class AddConnectionPane extends JPanel {
+        
+    }
 }

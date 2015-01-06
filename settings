@@ -1,0 +1,3 @@
+<settings>
+	<connection user="user" host="host" pass="pass" name="name"/>
+</settings>
