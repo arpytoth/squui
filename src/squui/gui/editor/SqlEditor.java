@@ -28,7 +28,8 @@ import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import squui.gui.connection.ConnectionPane;
+import squui.gui.Resources;
+import squui.gui.connection.ConnectionTab;
 
 /**
  * SQL text editor along with table
@@ -43,7 +44,7 @@ public class SqlEditor extends JPanel {
 
     private ArrayList<SqlEditorListener> listeners;
 
-    public SqlEditor(ConnectionPane connPane) {
+    public SqlEditor(ConnectionTab connPane) {
         listeners = new ArrayList<SqlEditorListener>();
         setupActions();
         textPane = new SqlTextPane();
@@ -76,10 +77,9 @@ public class SqlEditor extends JPanel {
         }
     }
 
+    @SuppressWarnings("serial")
     private void setupActions() {
-        runAction = new AbstractAction() {
-            private static final long serialVersionUID = 1L;
-
+        runAction = new AbstractAction("Run", Resources.getIcon("run.png")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 notifySqlExecuted();

@@ -21,7 +21,7 @@ package squui.gui.editor;
 
 import java.util.ArrayList;
 
-import squui.gui.connection.ConnectionPane;
+import squui.gui.connection.ConnectionTab;
 
 /**
  * Listens for events occurred in the SQL editor.
@@ -30,7 +30,7 @@ public interface SqlEditorListener {
 
     /**
      * Called when a list of SQL commands where executed by the SQL editor. The
-     * {@link ConnectionPane} will react at this event and will do the actual
+     * {@link ConnectionTab} will react at this event and will do the actual
      * execution.
      * 
      * @param sqlList

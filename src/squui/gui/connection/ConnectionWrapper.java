@@ -11,24 +11,21 @@ import squui.log.Log;
 
 public class ConnectionWrapper {
 
-    public String user;
-    public String host;
-    public String pass;
+    private ConnSettings settings;
     public Connection conn;
     public ArrayList<Schema> schemas;
 
-    public ConnectionWrapper() {
+    public ConnectionWrapper(ConnSettings settings) {
         schemas = new ArrayList<Schema>();
-        user = "root";
-        pass = "cvscvs";
-        host = "127.0.0.1";
+        this.settings = settings;
     }
 
     public void connect() {
         if (conn == null) {
             try {
-                String connStr = "jdbc:mysql://" + host + "?" +
-                    "autoReconnect=true&user=" + user + "&password=" + pass;
+                String connStr = "jdbc:mysql://" + settings.host + "?" +
+                    "autoReconnect=true&user=" + settings.user + "&password=" + 
+                    settings.pass;
 
                 Log.error(connStr);
                 conn = DriverManager.getConnection(connStr);

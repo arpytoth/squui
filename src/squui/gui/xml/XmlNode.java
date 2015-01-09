@@ -48,7 +48,7 @@ public class XmlNode {
     public String getAttr(String name) {
         for (XmlAttr attr: attributes) {
             if (attr.name.equals(name))
-                return attr.name;
+                return attr.value;
         }
         return null;
     }

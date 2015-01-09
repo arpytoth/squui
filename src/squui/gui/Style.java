@@ -21,12 +21,32 @@
 package squui.gui;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Style {
+    
 
+    public static Font font = new JLabel().getFont();
+    public static Font terminalFont = new JTextArea().getFont();
+    public static Font boldedFont = font.deriveFont(Font.BOLD);
+    public static Font linkFont = font;
+    static {
+        Map<TextAttribute, Integer> fontAttr;
+        fontAttr = new HashMap<TextAttribute, Integer>();
+        fontAttr.put(TextAttribute.UNDERLINE, 
+            TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+        linkFont = font.deriveFont(fontAttr);
+    }
+    
 	public static Color pnlBkColor = new JPanel().getBackground();
 	public static Color connBkColor = pnlBkColor.darker();
+	public static Color connHoverColor = pnlBkColor.brighter();
 	
 }

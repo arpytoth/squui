@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import squui.gui.connection.ConnectionSettings;
+import squui.gui.connection.ConnSettings;
 import squui.gui.xml.XmlNode;
 import squui.gui.xml.XmlParser;
 import squui.log.Log;
@@ -37,10 +37,10 @@ import squui.log.Log;
 public class Settings {
 
     private static Settings instance;
-    public ArrayList<ConnectionSettings> connections;
+    public ArrayList<ConnSettings> connections;
 
     public Settings() {
-        connections = new ArrayList<ConnectionSettings>();
+        connections = new ArrayList<ConnSettings>();
     }
 
     public static Settings get() {
@@ -59,7 +59,7 @@ public class Settings {
             for (int i = 0; i < node.children.size(); i++) {
                 XmlNode child = node.children.get(i);
                 if (child.name.equals("connection")) {
-                    ConnectionSettings c = new ConnectionSettings();
+                    ConnSettings c = new ConnSettings();
                     c.load(child);
                     connections.add(c);
                 }
@@ -72,7 +72,7 @@ public class Settings {
     public void save() {
         XmlNode node = new XmlNode();
         node.name = "settings";
-        for (ConnectionSettings s: connections) {
+        for (ConnSettings s: connections) {
             node.children.add(s.toXmlNode());
         }
         
@@ -87,17 +87,5 @@ public class Settings {
             Log.error(e);
         }
 
-    }
-
-    
-    public static void main(String[] args) {
-        ConnectionSettings s1 = new ConnectionSettings();
-        s1.name = "Connection1";
-        s1.host = "192.162.200.169";
-        s1.user = "root";
-        s1.pass = "cvs1cvs2cvs3";
-        
-        Settings.get().connections.add(s1);
-        Settings.get().save();
     }
 }

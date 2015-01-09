@@ -37,7 +37,7 @@ import squui.gui.output.OutputPanel;
 import squui.gui.table.ResultPane;
 import squui.gui.table.ResultPaneListener;
 
-public class ConnectionPane extends ContentPane implements SqlEditorListener,
+public class ConnectionTab extends ContentPane implements SqlEditorListener,
 ResultPaneListener {
     
     private static final long serialVersionUID = 1L;
@@ -53,8 +53,8 @@ ResultPaneListener {
     private JSplitPane outputEditorSplit;
     private JSplitPane leftRightSplit;
    
-    public ConnectionPane() {
-        conn = new ConnectionWrapper();
+    public ConnectionTab(ConnSettings s) {
+        conn = new ConnectionWrapper(s);
         conn.connect();
         
         buildGui();

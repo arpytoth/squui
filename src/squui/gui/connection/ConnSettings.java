@@ -18,23 +18,40 @@
  *    
  *   Toth Arpad (arpytoth@yahoo.com)
  */
-package squui.gui.home;
+package squui.gui.connection;
 
-import java.awt.Dimension;
+import squui.gui.xml.XmlNode;
 
-import javax.swing.JPanel;
+/**
+ * Holds the settings related to a database connection. 
+ */
+public class ConnSettings {
 
-import squui.gui.Style;
-
-@SuppressWarnings("serial")
-public class ConnectionPanel extends JPanel {
-	
-	public ConnectionPanel() {
-		setMaximumSize(new Dimension(200, 200));
-		setMinimumSize(new Dimension(200, 200));
-		setPreferredSize(new Dimension(200, 200));
-		
-		setBackground(Style.connBkColor);
-	}
-
+    public String name;
+    public String user;
+    public String host;
+    public String pass;
+    
+    public XmlNode toXmlNode() {
+        XmlNode node = new XmlNode();
+        node.name = "connection";
+        node.addAttr("user", user);
+        node.addAttr("host", host);
+        node.addAttr("pass", pass);
+        node.addAttr("name", name);
+        return node;
+    }
+    
+    public void load(XmlNode node) {
+        user = node.getAttr("user");
+        host = node.getAttr("host");
+        pass = node.getAttr("pass");
+        name = node.getAttr("name");
+    }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
+    
 }

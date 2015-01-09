@@ -1,3 +1,5 @@
 <settings>
-	<connection user="user" host="host" pass="pass" name="name"/>
+	<connection user="root" host="127.0.0.1" pass="cvscvs" name="Local Connection"/>
+	<connection user="root" host="192.168.200.169" pass="cvscvs" name="169"/>
+	<connection user="root" host="192.168.200.172" pass="cvs1cvs2cvs3" name="172"/>
 </settings>

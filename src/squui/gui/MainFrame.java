@@ -5,7 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import squui.gui.connection.ConnSettings;
+import squui.gui.connection.ConnectionTab;
 
 /**
  * The main window of the SquuI application. There is only one window so this
@@ -48,6 +52,16 @@ public class MainFrame extends JFrame implements  ActionListener{
 		setLocationRelativeTo(null);
 	}
 	
+	public void openConnection(ConnSettings settings) {
+	    try {
+	        ConnectionTab tab = new ConnectionTab(settings);  
+	        addTab(settings.name, tab);
+	    } catch (Throwable t) {
+	        JOptionPane.showConfirmDialog(this, t.getMessage(), "Error",
+	            JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+	    }
+	  
+	}
 	
 	/**
 	 * Open panel in a new tab. 

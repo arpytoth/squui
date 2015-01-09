@@ -22,29 +22,45 @@ package squui.gui.home;
 
 import java.awt.FlowLayout;
 
-import javax.swing.JPanel;
-
 import squui.gui.Settings;
 import squui.gui.TabPanel;
-import squui.gui.connection.ConnectionSettings;
+import squui.gui.connection.ConnSettings;
 
+/**
+ * The home panel. Always the first tab and cannot be closed. There is only
+ * one home panel so we will simplify our code by making it singleton. Why
+ * bother with observers and references and so on..
+ */
 @SuppressWarnings("serial")
 public class HomePanel extends TabPanel {
 
-    public HomePanel()   {
-        Settings settings = Settings.get();
-        for (int i = 0; i < settings.connections.size(); i++) {
-            ConnectionSettings cs = settings.connections.get(i);
-            ConnectionPanel panel = new ConnectionPanel();
-            add(panel);
-        }
-        
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+    private static HomePanel instance;
+    
+    private HomePanel() {
+       refreshHomePanel();
     }
 
-
+    /**
+     * Used when the connection list changes. This method will cause the
+     * HomePanel to update its connection list.
+     */
+    public void refreshHomePanel() {
+        Settings settings = Settings.get();
+        removeAll();
+        for (int i = 0; i < settings.connections.size(); i++) {
+            ConnSettings cs = settings.connections.get(i);
+            ConnButton panel = new ConnButton(cs);
+            add(panel);
+        }
+        add(new NewConnButton());
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        validateTree();
+        repaint();
+    }
     
-    private class AddConnectionPane extends JPanel {
-        
+    public static HomePanel get() {
+        if (instance == null)
+            instance = new HomePanel();
+        return instance;
     }
 }

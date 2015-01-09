@@ -2,9 +2,6 @@ package squui.gui;
 
 import java.util.ArrayList;
 
-import squui.gui.connection.ConnectionModule;
-
-
 /**
  * A list of all modules in the GUI application. When you add a new module
  * you must make a reference here. The GUI engine will load the information
@@ -19,7 +16,6 @@ public class Modules {
     
     public static ArrayList<Module> getModules() {
         if (modules == null) {
-            defaultModule = new ConnectionModule();
             modules = new ArrayList<Module>();
             modules.add(defaultModule);
         }

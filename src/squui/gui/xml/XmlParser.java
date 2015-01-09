@@ -254,7 +254,6 @@ public class XmlParser {
                         if (child.isCDataNode) {
                             node.cdata = child.cdata;
                             nextChar();
-                            return node;
                         } else if (child.isEndTagNode) {
                             if (!child.name.equals(node.name))
                                 throw new XmlException("> expected.");
@@ -262,7 +261,6 @@ public class XmlParser {
                         } else {
                             node.children.add(child);
                             nextChar();
-                            return node;
                         }
                     } else {
                         node.value = parseStringValue();
